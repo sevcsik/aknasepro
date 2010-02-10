@@ -1,0 +1,44 @@
+Aknasepro specifikacio
+Sevcsik Andras (c) 2009
+
+1. Bevezetes
+
+A mai vilagban az aknakereso jatekok nepszerusege jelentosen megnott. A tartalmas kikapcsolodas mellett, jotekony hatasa van mind a logikai, mind a strategiai erzek fejlesztesere, ezert az otthoni felhasznalokon kivul a haditengereszetnel is eloszeretettel alkalmazzak.
+
+A hazi feladatban szereplo implementacio neve "Aknasepro", ami az angolszasz eredetu Minesweeper elnevezes tukorforditasa, igy finom humorral megfuszerezve az amugyis kellemes kikapcsolodast nyujto jatekot.
+
+2. Technikai hatter
+
+   2.1. Programozasi nyelv
+   
+   Az Aknasepro teljes mertekben C nyelven irodott, amely egy altalanos celu, nagy hatekonysagu, szinte minden platformon elerheto programozasi nyelv. A fejlesztes soran torekedtem a leheto legnagyobb foku platformfuggetlensegre, ezert ahol lehetett, a C89 (ANSI C) szabvanynak megfelelo kodot hasznaltam. Termeszetesen nehany muveletnel elkerulhetetlen volt az operacios rendszer sajat fuggvenytarainak hasznalata, ebben az esetben forditasidoben valasztja ki a compiler a megfelelo fejlecfajlokat.
+   
+   2.2. Tamogatott platformok
+   
+   Az fejlesztes GNU/Linux rendszeren tortent, ezert a kod (termeszetesen a C89 szabvany keretein belul) a GCC forditora van optimalizalva. A hazi feladat elkeszulesekor Windows, Linux es Solaris x86 buildek lesznek elerhetoek. Annak erdekeben, hogy a felhasznaloi elmeny mindegyik platformon tokeletes legyen, apro praktikak, ugynevezett "hakkolasok" is elo fognak fordulni a kodban, de ezek szamat igyekszem minimalisra csokkenteni.
+   
+   A Windowsos build Visual Studio 2008-ban fog keszulni.
+   
+   2.3. Fuggosegek
+   
+   A platformfuggetlenseg jegyeben a program csak a cel operacios rendszerekkel alapertelmezetten szallitott fuggvenykonyvtarakat (stdlib) hasznalja. POSIX-kompatibilis rendszereken a terminalvezerleshez szukseg van tovabba a termios.h headerre, ami szinten a default install resze. Windowson a fuggosegek egyelore ismeretlenek.
+   
+3. Felhasznaloi felulet
+
+Az Aknasepro felhasznaloi felulete szoveges modu, es VT100-kompatibilis terminalokkal mukodik. A program gyakran hasznal hasznal ANSI escape-szekvenciakat a terminalkurzor mozgatasara, es a szines megjelenitesre. A teljes jatekelmenyhez ezert szines monitor ajanlott.
+
+A futtathato fajl 0-3 parancssori parametert var. Megadhatunk parameterkent egy fajlnevet, ami egy elozoleg az Aknaseprobol elmentett jatekallapotot tartalmaz. 2-3 parameter eseten megadhatjuk a tabla szelesseget es magassagat, valamint opcionalisan az aknak szamat. Parameterek nelkuli inditas eseten alapertelmezett modban indul a program: 20x20 meretu tabla, 20 aknaval.
+
+   3.1. Technikai megvalositas
+   
+   A program inditasanal kikapcsoljuk a terminal ECHO funkciojat, es non-canonical modba allitjuk, ezaltal a terminal nem irja ki a leutott billentyuket, es nem ertelmezi oket (igy a kurzorbillentyuk karakterei is megjelennek stdin-ben). 
+   
+   A program egy vegtelen ciklusban mukodik, ami 40 ms-onkent ujrarajzolja a kepernyot, es beolvassa az inputot. A kurzorbillentyuk escape szekvenciait figyeli az stdin-ben, es ennek megfeleloen noveli/csokkenti a kurzor koordinatait, amit a kepernyo kirajzolasanal feher hatterszinnel jelolunk.
+   
+   A program ket dinamikus, ketdimenzios tombot hasznal. Az egyik signed char tipusu, ebben taroljuk el, hogy a mezoben van -e akna (ekkor az ertek -1), illetve hany akna van a kornyezeteben. A masik tombben azt taroljuk, hogy az adott mezo fel van -e vedve, zaszlozva van -e, vagy meg ismeretlen.
+   
+   A Space billentyu lenyomasaval fedhetunk fel egy mezot. Mivel nem kellemes dolog az elso lepesnel rogton aknat talalni, ezert a tablat csak az elso lepes utan generaljuk az aknakkal es a szamokkal, biztositva, hogy a felfedett mezore ne keruljon akna.
+   
+4. Dokumentacio
+
+A program fejlesztoi dokumentaciojat Doxygennel generalom, amiben minden fuggveny es typedef dokumentalva van. A jelenlegi dokumentaciot (v0.2) csatoltam a levelhez. Kellemes bongeszest! ;)
